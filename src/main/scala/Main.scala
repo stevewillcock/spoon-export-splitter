@@ -7,7 +7,7 @@ object Main extends App {
   import scala.xml.XML
 
   val xmlExportFile = XML.loadFile(this.args(0))
-  val exportDirectory = this.args(1)
+  val exportDirectory = new File(this.args(1))
 
   val transformNodes = xmlExportFile \ "transformations" \ "transformation"
   println(transformNodes.length)
@@ -20,12 +20,14 @@ object Main extends App {
       case infoNode => (infoNode \ "name" text, infoNode \ "directory" text)
     }
 
-    val directoryName = directory.replace("/", "\\")
-    val saveName = s"$exportDirectory${snakify(directoryName + "\\" + name)}.ktr"
-    val f = new File(saveName.substring(0, saveName.lastIndexOf("\\")))
-    f.mkdirs()
-    println(s"Saving $name as $saveName")
-    XML.save(saveName, kettleTransformXML)
+    val targetDirectory = new File(exportDirectory, snakify(directory))
+    val targetFile = new File(targetDirectory, snakify(name) + ".ktr")
+
+    targetDirectory.mkdirs()
+    val path = targetFile.getPath
+    println(s"Saving $name as $path")
+    XML.save(path, kettleTransformXML)
+
   }
 
 }
