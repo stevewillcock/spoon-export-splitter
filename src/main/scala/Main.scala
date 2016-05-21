@@ -12,12 +12,14 @@ object Main extends App {
   val transformNodes = xmlExportFile \ "transformations" \ "transformation"
   println(transformNodes.length)
 
-  val transformNames = (transformNodes \ "info" \ "name").toList.map(x => x.text)
-  val transformDirectories = (transformNodes \ "info" \ "directory").toList.map(x => x.text)
+  def snakify(name: String) = name.replaceAll("([A-Z]+)([A-Z][a-z])", "$1_$2").replaceAll("([a-z\\d])([A-Z])", "$1_$2").replace(" ", "_").toLowerCase
 
-  def snakify(name : String) = name.replaceAll("([A-Z]+)([A-Z][a-z])", "$1_$2").replaceAll("([a-z\\d])([A-Z])", "$1_$2").replace(" ", "").toLowerCase
+  transformNodes.toList.foreach { kettleTransformXML =>
 
-  transformNames.zip(transformNodes.toList).zip(transformDirectories).foreach { case ((name, kettleTransformXML), directory) =>
+    val (name, directory) = kettleTransformXML \ "info" match {
+      case infoNode => (infoNode \ "name" text, infoNode \ "directory" text)
+    }
+
     val directoryName = directory.replace("/", "\\")
     val saveName = s"$exportDirectory${snakify(directoryName + "\\" + name)}.ktr"
     val f = new File(saveName.substring(0, saveName.lastIndexOf("\\")))
