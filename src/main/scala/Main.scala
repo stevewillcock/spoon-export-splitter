@@ -15,11 +15,11 @@ object Main extends App {
   val transformNames = (transformNodes \ "info" \ "name").toList.map(x => x.text)
   val transformDirectories = (transformNodes \ "info" \ "directory").toList.map(x => x.text)
 
-  def snakify(name : String) = name.replaceAll("([A-Z]+)([A-Z][a-z])", "$1_$2").replaceAll("([a-z\\d])([A-Z])", "$1_$2").toLowerCase
+  def snakify(name : String) = name.replaceAll("([A-Z]+)([A-Z][a-z])", "$1_$2").replaceAll("([a-z\\d])([A-Z])", "$1_$2").replace(" ", "").toLowerCase
 
   transformNames.zip(transformNodes.toList).zip(transformDirectories).foreach { case ((name, kettleTransformXML), directory) =>
     val directoryName = directory.replace("/", "\\")
-    val saveName = exportDirectory + snakify(directoryName + "\\" + name).replace(" ", "_") + ".ktr"
+    val saveName = s"$exportDirectory${snakify(directoryName + "\\" + name)}.ktr"
     val f = new File(saveName.substring(0, saveName.lastIndexOf("\\")))
     f.mkdirs()
     println(s"Saving $name as $saveName")
