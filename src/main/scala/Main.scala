@@ -9,7 +9,7 @@ object Main extends App {
 
   val xmlExportFile = XML.loadFile(this.args(0))
 
-  def exportNodes(nodes: NodeSeq, nameRootFinder: NodeSeq => NodeSeq, fileExtension: String): Unit = {
+  def exportNodes(nodes: NodeSeq, fileExtension: String, nameRootFinder: (NodeSeq) => NodeSeq = n => n): Unit = {
 
     println(s"Exporting ${nodes.length} files as $fileExtension")
 
@@ -34,7 +34,7 @@ object Main extends App {
 
   val exportDirectory = new File(this.args(1))
 
-  exportNodes(xmlExportFile \ "transformations" \ "transformation", n => n \ "info", "ktr")
-  exportNodes(xmlExportFile \ "jobs" \ "job", n => n, "kjb")
+  exportNodes(xmlExportFile \ "transformations" \ "transformation", "ktr", n => n \ "info")
+  exportNodes(xmlExportFile \ "jobs" \ "job", "kjb")
 
 }
