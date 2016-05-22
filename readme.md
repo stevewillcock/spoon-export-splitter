@@ -1,8 +1,8 @@
 # spoon-export-splitter
 
-This is a simple scala program to extract the transforms and jobs from the XML file which is created by the Pentaho Data Integration "Tools -> Export Repository" action.
+This is a simple scala program to extract the transforms and jobs from the XML file which is created by the Pentaho Data Integration "Tools -> Export Repository" action. Files are extracted into the same folder structure that was present in the repository.
 
-It will attempt to tidy up filenames, replacing spaces with underscores and changing CamelCase to snake_case.
+This will currently attempt to tidy up filenames, replacing spaces with underscores and changing CamelCase to snake_case (there's no option to disable this at the moment - I'll add one later).
 
 The easiest way to run this is with sbt:
 
