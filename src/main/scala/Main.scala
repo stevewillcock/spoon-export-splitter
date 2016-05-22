@@ -16,8 +16,7 @@ object Main extends App {
     nodes.toList.foreach { kettleXMlNode =>
 
       val (name, directory) = nameRootFinder(kettleXMlNode) match {
-        case n =>
-          (n \ "name" text, n \ "directory" text)
+        case n => (n \ "name" text, n \ "directory" text)
       }
 
       val targetDirectory = new File(exportDirectory, snakify(directory))
