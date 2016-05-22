@@ -5,7 +5,7 @@ import scala.xml.{NodeSeq, XML}
 
 object Main extends App {
 
-  def snakify(name: String) = name.replaceAll("([A-Z]+)([A-Z][a-z])", "$1_$2").replaceAll("([a-z\\d])([A-Z])", "$1_$2").replace(" ", "_").toLowerCase
+  def asSnakeCase(name: String) = name.replaceAll("([A-Z]+)([A-Z][a-z])", "$1_$2").replaceAll("([a-z\\d])([A-Z])", "$1_$2").replace(" ", "_").toLowerCase
 
   val xmlExportFile = XML.loadFile(this.args(0))
 
@@ -19,8 +19,8 @@ object Main extends App {
         case n => (n \ "name" text, n \ "directory" text)
       }
 
-      val targetDirectory = new File(exportDirectory, snakify(directory))
-      val targetFile = new File(targetDirectory, s"${snakify(name)}.$fileExtension")
+      val targetDirectory = new File(exportDirectory, asSnakeCase(directory))
+      val targetFile = new File(targetDirectory, s"${asSnakeCase(name)}.$fileExtension")
 
       targetDirectory.mkdirs()
       val path = targetFile.getPath
